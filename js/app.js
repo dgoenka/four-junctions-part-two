@@ -33,14 +33,14 @@ function handleFormSubmit(event) {
       console.log("previous_item_wall_height: " + previous_item_wall_height);
       console.log("hasGoneDown before is: " + hasGoneDown);
       console.log("hasGoneBackUp before is: " + hasGoneBackUp);
-      if (
-        current_item_wall_height < previous_item_wall_height &&
-        !hasGoneDown
-      ) {
-        console.log("region start detected");
-        containerStart = j;
-        containerStartWallHeight = previous_item_wall_height;
-        hasGoneDown = true;
+      if (current_item_wall_height < previous_item_wall_height) {
+        if (hasGoneDown && hasGoneBackUp) break;
+        else if (!hasGoneDown) {
+          console.log("region start detected");
+          containerStart = j;
+          containerStartWallHeight = previous_item_wall_height;
+          hasGoneDown = true;
+        }
       } else if (
         current_item_wall_height > previous_item_wall_height &&
         hasGoneDown
@@ -56,7 +56,6 @@ function handleFormSubmit(event) {
       }
       console.log("hasGoneDown after is: " + hasGoneDown);
       console.log("hasGoneBackUp after is: " + hasGoneBackUp);
-      if (hasGoneDown && hasGoneBackUp) break;
     }
     if (hasGoneDown && hasGoneBackUp) {
       console.log("setting water levels ");
@@ -84,6 +83,7 @@ function createWaterTankTableGrid(data) {
   maxHeight += 2;
 
   const table = document.getElementById("explainer_table");
+  table.innerHTML = "";
   const colors = {
     air: "transparent",
     wall: "#C19A6B",
